@@ -28,7 +28,7 @@ const database = {
 //create route to test get/post is working using postman
 app.get('/', (req, res)=>{
     // send response to postman
-    res.send('this is working!');
+    res.send(database.users);
 } )
 
 app.post('/login', (req, res) =>{
@@ -51,6 +51,20 @@ app.post('/register', (req,res) => {
         joined: new Date()  
     });
     res.json(database.users[database.users.length-1]);
+})
+
+app.get('/profile/:id', (req,res) => {
+    const {id } = req.params;
+    let found = false;
+    database.users.forEach(user => {
+        if (user.id === id){
+            found = true;
+           return res.json(user);
+        }
+    })
+    if (!found){
+        res.status(400).json('user not found');
+    }
 
 })
 
