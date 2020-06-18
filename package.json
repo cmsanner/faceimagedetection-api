@@ -1,0 +1,27 @@
+{
+  "name": "faceimagedetection-api",
+  "version": "1.0.0",
+  "description": "api for the faceimagedetection app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cmsanner/faceimagedetection-api.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cmsanner/faceimagedetection-api/issues"
+  },
+  "homepage": "https://github.com/cmsanner/faceimagedetection-api#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  }
+}
