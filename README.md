@@ -3,6 +3,13 @@ api for the faceimagedetection app
 
 application is node and JavaScript
 
+get faceimagedetection from GitHub
+
+install - nodemon, bcrypt-nodejs, cors
+npm install nodemon
+npm install bcrypt-nodejs
+npm install cors
+
 1. Start faceimagedetection-api first 
     > npm start 
 2. Start the faceimagedetection next

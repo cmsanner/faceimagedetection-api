@@ -1,7 +1,25 @@
 const express = require('express');
 const bcrypt = require('bcrypt-nodejs');
 const cors = require('cors');
+const knex = require('knex');
 
+//NOTE: using postgres database and we downloaded pg, so use client: 'pg'
+const db = knex({
+    client: 'pg',
+    connection: {
+      host : '127.0.0.1',
+      user : 'Chris',
+      password : 'test',
+      database : 'smartbrain'
+    }
+  });
+
+//   console.log(db.select('*').table('users'));
+db.select('*').from('users').then(data => {
+    console.log(data);
+})
+
+ 
 const app = express();
 app.use(express.json());
 app.use(cors());
@@ -67,14 +85,29 @@ app.post('/register', (req,res) => {
         // Store hash in your password DB.
         console.log('hash of password: ',hash);
     });
-    database.users.push({
-        id: '125',
-        name: name,
-        email: email,
-        entries: 0,
-        joined: new Date()  
-    });
-    res.json(database.users[database.users.length-1]);
+    //use this for local database array "database"
+    // database.users.push({
+    //     id: '125',
+    //     name: name,
+    //     email: email,
+    //     entries: 0,
+    //     joined: new Date()  
+    // });
+    //use this for the relational database "db"
+    db('users')
+        .returning('*')
+        .insert({
+            name: name,
+            email: email,
+            joined: new Date()
+        })
+        // .then(console.log);
+        .then(user => {
+            res.json(user[0]);
+        })
+        .catch(err => res.status(400).json('unable to register, user already taken'))
+
+    // res.json(database.users[database.users.length-1]);
 })
 
 app.get('/profile/:id', (req,res) => {
