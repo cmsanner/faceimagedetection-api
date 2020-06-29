@@ -93,8 +93,9 @@ app.post('/register', (req,res) => {
     //     entries: 0,
     //     joined: new Date()  
     // });
+    // res.json(database.users[database.users.length-1]);
     //use this for the relational database "db"
-    db('users')
+    return db('users')
         .returning('*')
         .insert({
             name: name,
@@ -106,38 +107,60 @@ app.post('/register', (req,res) => {
             res.json(user[0]);
         })
         .catch(err => res.status(400).json('unable to register, user already taken'))
-
-    // res.json(database.users[database.users.length-1]);
 })
 
 app.get('/profile/:id', (req,res) => {
     const {id } = req.params;
-    let found = false;
-    database.users.forEach(user => {
-        if (user.id === id){
-            found = true;
-           return res.json(user);
-        }
-    })
-    if (!found){
-        res.status(400).json('user not found');
-    }
+    //use with the database array 'database'
+    // let found = false;
+    // database.users.forEach(user => {
+    //     if (user.id === id){
+    //         found = true;
+    //        return res.json(user);
+    //     }
+    // })
+    // if (!found){
+    //     res.status(400).json('user not found');
+    // }
+    db.select('*').from('users').where({'id': id})
+        .then(user => {
+            // console.log('my user: ', user, ' profile id: ', id);
+            if(user.length){
+                res.json(user[0]);
+            }else{
+                res.status(400).json('not found') 
+            }
+            
+        })
+        .catch(err => res.status(400).json('error getting user'))
+ 
 })
 
 app.put('/image',(req,res) => {
     const {id } = req.body;
-    let found = false;
-    database.users.forEach(user => {
-        if (user.id === id){
-            found = true;
-            user.entries ++;
-           return res.json(user.entries);
-        }
-    })
-    if (!found){
-        res.status(400).json('user not found');
-    }
+    //use with database array 'database'
+    // let found = false;
+    // database.users.forEach(user => {
+    //     if (user.id === id){
+    //         found = true;
+    //         user.entries ++;
+    //        return res.json(user.entries);
+    //     }
+    // })
+    // if (!found){
+    //     res.status(400).json('user not found');
+    // }
 
+    //use with relational database 'db'
+    db('users').where('id', '=', id)
+    .increment('entries',1)
+    .returning('entries')
+    .then(entries => {
+        // console.log('entries: ', entries[0])
+        res.json(entries[0]);
+    })
+    .catch(err => res.status(400).json('unable to get entries') )
+   
 })
 
 app.listen(port, ()=>{
