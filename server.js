@@ -30,7 +30,8 @@ app.get('/', (req, res)=>{
     res.send(database.users);
 } )
 
-app.post('/login', (req, res) => { login.handleLogin(req, res, db, bcrypt) } )
+// app.post('/login', (req, res) => { login.handleLogin(req, res, db, bcrypt) } )
+app.post('/login', login.handleLogin( db, bcrypt))
 app.post('/register', (req, res) => { register.handleRegister(req,res, db, bcrypt)} )
 app.get('/profile/:id', (req,res,db ) => {handleProfile(req, res, db) })
 app.put('/image',(req,res) => {handleImage(req, res, db) })
